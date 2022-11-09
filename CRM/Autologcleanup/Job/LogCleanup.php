@@ -8,13 +8,21 @@ class CRM_Autologcleanup_Job_LogCleanup {
   private $maxAge;
 
   /**
+   * @var array
+   */
+  private $ignoreTables;
+
+  /**
    * Constructs a new LogCleanup object.
    *
    * @param string $maxAge
    *  Maximum log age.
+   * @param array $ignoreTables
+   *  Log tables that should not be cleared.
    */
-  public function __construct(string $maxAge) {
+  public function __construct(string $maxAge, array $ignoreTables) {
     $this->maxAge = $maxAge;
+    $this->ignoreTables = $ignoreTables;
   }
 
   /**
@@ -56,7 +64,7 @@ class CRM_Autologcleanup_Job_LogCleanup {
    */
   private function pruneLogTables() {
     $ageAgo = $this->transformLogAge($this->maxAge);
-    $logTables = $this->getLogTables();
+    $logTables = array_diff($this->getLogTables(), $this->ignoreTables);
 
     foreach ($logTables as $logTable) {
       $query = "DELETE FROM {$logTable} WHERE log_date < '{$ageAgo}'";

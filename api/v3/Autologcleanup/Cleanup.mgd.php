@@ -10,11 +10,11 @@ return [
     'params' => [
       'version' => 3,
       'name' => 'Call Autologcleanup.Cleanup API',
-      'description' => 'CLear records from the log tables',
+      'description' => 'Clear records from the log tables',
       'run_frequency' => 'Daily',
       'api_entity' => 'Autologcleanup',
       'api_action' => 'Cleanup',
-      'parameters' => "maxAge=2 years",
+      'parameters' => "maxAge=2 years \nignoreTables=",
       'is_active' => 0,
     ],
   ],

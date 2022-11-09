@@ -10,6 +10,7 @@
  */
 function _civicrm_api3_autologcleanup_Cleanup_spec(&$spec) {
   $spec['maxAge']['api.required'] = 1;
+  $spec['ignoreTables']['api.required'] = 0;
 }
 
 /**
@@ -25,7 +26,8 @@ function _civicrm_api3_autologcleanup_Cleanup_spec(&$spec) {
  * @throws API_Exception
  */
 function civicrm_api3_autologcleanup_Cleanup($params) {
-  $logCleanup = new CRM_Autologcleanup_Job_LogCleanup($params['maxAge']);
+  $ignoreTables = empty($params['ignoreTables']) ? [] : explode(',', $params['ignoreTables']);
+  $logCleanup = new CRM_Autologcleanup_Job_LogCleanup($params['maxAge'], $ignoreTables);
   return civicrm_api3_create_success($logCleanup->run(), $params, 'Autologcleanup', 'Cleanup');
 
 }
