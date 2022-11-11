@@ -26,8 +26,23 @@ function _civicrm_api3_autologcleanup_Cleanup_spec(&$spec) {
  * @throws API_Exception
  */
 function civicrm_api3_autologcleanup_Cleanup($params) {
-  $ignoreTables = empty($params['ignoreTables']) ? [] : explode(',', $params['ignoreTables']);
-  $logCleanup = new CRM_Autologcleanup_Job_LogCleanup($params['maxAge'], $ignoreTables);
-  return civicrm_api3_create_success($logCleanup->run(), $params, 'Autologcleanup', 'Cleanup');
+  $lock = \Civi::lockManager()->acquire('worker.autologcleanup.cleanup');
+  if (!$lock->isAcquired()) {
+    return civicrm_api3_create_error('Could not acquire lock, another AutlogCleanup process is running');
+  }
+  $result = FALSE;
+
+  try {
+    $ignoreTables = empty($params['ignoreTables']) ? [] : explode(',', $params['ignoreTables']);
+    $logCleanup = new CRM_Autologcleanup_Job_LogCleanup($params['maxAge'], $ignoreTables);
+    $result = $logCleanup->run();
+  }
+  catch (\Exception $e) {
+    throw $e;
+  } finally {
+    $lock->release();
+  }
+
+  return civicrm_api3_create_success($result, $params, 'Autologcleanup', 'Cleanup');
 
 }
