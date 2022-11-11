@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<extension key="io.compuco.autologcleanup" type="module">
+  <file>autologcleanup</file>
+  <name>Autolog Cleanup</name>
+  <description>Automate clean up of log tables</description>
+  <license>AGPL-3.0</license>
+  <maintainer>
+    <author>Compuco</author>
+    <email>hello@compuco.io</email>
+  </maintainer>
+  <urls>
+    <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
+    <url desc="Documentation">https://github.com/compucorp/io.compuco.autologcleanup/blob/master/readme.md</url>
+  </urls>
+  <releaseDate>2022-11-07</releaseDate>
+  <version>1.0.0-alpha.1</version>
+  <develStage>alpha</develStage>
+  <compatibility>
+    <ver>5.39</ver>
+  </compatibility>
+  <classloader>
+    <psr4 prefix="Civi\" path="Civi"/>
+  </classloader>
+  <civix>
+    <namespace>CRM/Autologcleanup</namespace>
+    <format>22.05.2</format>
+    <angularModule>crmAutologcleanup</angularModule>
+  </civix>
+  <mixins>
+    <mixin>mgd-php@1.0.0</mixin>
+    <mixin>setting-php@1.0.0</mixin>
+  </mixins>
+</extension>
